@@ -24,4 +24,12 @@ public abstract class Human implements Communication {
     public void setMoney(double money) {
         this.money = money;
     }
+
+    public int getLoveIndex() {
+        return loveIndex;
+    }
+
+    public void setLoveIndex(int loveIndex) {
+        this.loveIndex = loveIndex;
+    }
 }

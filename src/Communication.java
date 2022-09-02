@@ -1,33 +1,37 @@
-import java.util.List;
+import java.util.Map;
 
 public interface Communication {
 
-    default double costOfItem(Item item){
+    default double costOfItem(Item item) {
         return item.getCost();
     }
 
-    default void isItemsInStorage(Seller seller, List<Item> wishListOfConsumer){
-        for (Item item : wishListOfConsumer) {
-            if(!seller.getItems().contains(item)){
-                System.out.println("У нас нет " + item.getNameOfItem() );
-            }
-        }
-    }
-
-    //Дописать метод
-    default double totalCost(){
-
-    }
-
-    default void areYouPoor (Consumer consumer){
-        if(totalCost() > consumer.getMoney()){
-            System.out.println("Ты нищеброд");
+    default void isItemsAvailable(Item item, int qt, Map<Item, Integer> list) {
+        if (!list.containsKey(item)) {
+            System.out.println("We don't have " + item);
+        } else if (qt > list.get(item)) {
+            int temp = qt - list.get(item);
+            System.out.println("Don't have enough of " + item.getNameOfItem() +
+                    " in our store, decrease quantity on " + temp + " pcs");
         } else {
-            walkInStorage();
+            int temp = qt - list.get(item);
+            System.out.println("We have enough of " + item.getNameOfItem()
+                    + ". You can get " + temp + " pcs more.");
         }
     }
 
+    default double totalCost(Map<Item, Integer> list) {
+        double summ = 0;
+        for (Map.Entry<Item, Integer> entry : list.entrySet()) {
+            summ += entry.getKey().getCost() * entry.getValue();
+        }
+        return summ;
+    }
 
-    //У Покупателя и Продавца реализовать свои вариации метода "пойти на склад"
-    void walkInStorage();
+    default void walkInStorage() {
+    }
+
+    default void welcomeToStore(Consumer consumer) {
+        System.out.println(consumer.getName() + " stood a little at the entrance, then bravely went inside.");
+    }
 }
